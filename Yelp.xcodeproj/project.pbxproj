@@ -156,6 +156,7 @@
 				TargetAttributes = {
 					A5CA68891DB3E1EA0085DCF9 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = B77T45EXXL;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -372,9 +373,11 @@
 			baseConfigurationReference = 6003C10E6EEF3A2ABECCE9B2 /* Pods-Yelp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = B77T45EXXL;
 				INFOPLIST_FILE = Yelp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = coderschool.Yelp;
+				PRODUCT_BUNDLE_IDENTIFIER = toicodedoec.Yelp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -385,9 +388,11 @@
 			baseConfigurationReference = 54E6FC3FD7D2654ED0511482 /* Pods-Yelp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = B77T45EXXL;
 				INFOPLIST_FILE = Yelp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = coderschool.Yelp;
+				PRODUCT_BUNDLE_IDENTIFIER = toicodedoec.Yelp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
