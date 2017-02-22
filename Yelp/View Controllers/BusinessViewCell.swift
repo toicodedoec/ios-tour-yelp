@@ -7,12 +7,26 @@
 //
 
 import UIKit
+import AFNetworking
 
 class BusinessViewCell: UITableViewCell {
     
+    @IBOutlet weak var imgAvatar: UIImageView!
+    @IBOutlet weak var lblName: UILabel!
+    @IBOutlet weak var lblDistance: UILabel!
+    @IBOutlet weak var lblNumOfReviews: UILabel!
+    @IBOutlet weak var lblAddress: UILabel!
+    @IBOutlet weak var lblCategory: UILabel!
+    @IBOutlet weak var imgRatedStars: UIImageView!
+    
     var business: Business! {
         didSet {
-            
+            imgAvatar.setImageWith(business.imageURL!)
+            lblNumOfReviews.text = business.reviewCount?.stringValue
+            lblCategory.text = business.categories
+            lblAddress.text = business.address
+            lblName.text = business.name
+            imgRatedStars.setImageWith(business.ratingImageURL!)
         }
     }
     

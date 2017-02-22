@@ -30,7 +30,7 @@
                                         <rect key="frame" x="0.0" y="28" width="343" height="155"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IM1-AJ-0vc" id="yH7-cf-nqH">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="154"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="154.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bIN-oi-4dX">
@@ -80,6 +80,15 @@
                                                 <constraint firstAttribute="trailing" secondItem="Zyg-HK-yCy" secondAttribute="trailing" constant="8" id="cxv-s2-2zp"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="imgAvatar" destination="bIN-oi-4dX" id="Ieu-HI-R5l"/>
+                                            <outlet property="imgRatedStars" destination="DFx-Nj-9ro" id="Xrd-89-maC"/>
+                                            <outlet property="lblAddress" destination="Et2-yt-bH6" id="u7b-X0-nGI"/>
+                                            <outlet property="lblCategory" destination="22g-rW-cwm" id="8ST-CY-QaY"/>
+                                            <outlet property="lblDistance" destination="Zyg-HK-yCy" id="3WE-i4-QUP"/>
+                                            <outlet property="lblName" destination="ikK-U5-ijM" id="9Is-IB-8Dw"/>
+                                            <outlet property="lblNumOfReviews" destination="Shg-nO-jqt" id="RGn-u6-6oy"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -92,6 +101,9 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="mxx-Qc-Lpj" secondAttribute="bottom" id="zwz-s2-cPd"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tblResult" destination="mxx-Qc-Lpj" id="n1L-ae-qOb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
