@@ -13,7 +13,11 @@ class BusinessesViewController: UIViewController {
     
     @IBOutlet weak var tblResult: UITableView!
     
+    let refreshControl = UIRefreshControl()
+    
     var businesses: [Business]!
+    
+    var isStartup: Bool = true;
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,22 +25,36 @@ class BusinessesViewController: UIViewController {
         tblResult.dataSource = self
         tblResult.delegate = self
         
+        isStartup = true;
+        
+        setupRefreshControl()
+        
         loadData()
         
     }
     
     func loadData(){
-        // display loading indicator
-        MBProgressHUD.showAdded(to: self.view, animated: true)
+        if(isStartup){
+            // display loading indicator
+            MBProgressHUD.showAdded(to: self.view, animated: true)
+        }
         
         Business.search(with: "Thai") { (businesses: [Business]?, error: Error?) in
             if let businesses = businesses {
                 self.businesses = businesses
                 
                 self.tblResult.reloadData()
+                self.refreshControl.endRefreshing()
+                
                 MBProgressHUD.hide(for: self.view, animated: true)
+                self.isStartup = false;
             }
         }
+    }
+    
+    func setupRefreshControl() {
+        refreshControl.addTarget(self, action: #selector(loadData), for: UIControlEvents.valueChanged)
+        tblResult.insertSubview(refreshControl, at: 0)
     }
     
 }
