@@ -22,17 +22,19 @@ class BusinessViewCell: UITableViewCell {
     var business: Business! {
         didSet {
             imgAvatar.setImageWith(business.imageURL!)
-            lblNumOfReviews.text = business.reviewCount?.stringValue
+            lblNumOfReviews.text = (business.reviewCount?.stringValue)! + " Reviews"
             lblCategory.text = business.categories
             lblAddress.text = business.address
             lblName.text = business.name
             imgRatedStars.setImageWith(business.ratingImageURL!)
+            lblDistance.text = business.distance
         }
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        imgAvatar.layer.cornerRadius = 6.0
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
