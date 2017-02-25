@@ -19,6 +19,8 @@ class BusinessesViewController: UIViewController {
     
     var isStartup: Bool = true;
     
+    var prevFilter: Filter?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -61,6 +63,7 @@ class BusinessesViewController: UIViewController {
         let navVC = segue.destination as! UINavigationController
         let filterVC = navVC.topViewController as! FilterViewController
         
+        filterVC.criteria = prevFilter
         filterVC.delegate = self
     }
     
@@ -85,7 +88,9 @@ extension BusinessesViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension BusinessesViewController: FilterViewControllerDelegate {
+    
     func filterViewControllerChangeValue(filterVC: FilterViewController, didUpdateFilter filter: Filter) {
+        prevFilter = filter
         MBProgressHUD.showAdded(to: self.view, animated: true)
         Business.search(with: "", sort: filter.sort.map { YelpSortMode(rawValue: $0) }!, categories: filter.categories, deals: filter.isDeal) { (businesses: [Business]?, error: Error?) in
             if let businesses = businesses {

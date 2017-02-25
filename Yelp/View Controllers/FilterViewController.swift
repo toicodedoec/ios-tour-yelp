@@ -194,7 +194,11 @@ class FilterViewController: UIViewController {
     
     var selectedDistance = 0
     
+    var selectedDeals = false
+    
     var delegate: FilterViewControllerDelegate!
+    
+    var criteria: Filter?
     
     @IBOutlet weak var tblSetting: UITableView!
     
@@ -210,7 +214,9 @@ class FilterViewController: UIViewController {
             }
         }
         
-        let criterion = Filter(deals: true, radius: selectedDistance, sort: selectedSort, category: filters)
+        let criterion: Filter = Filter(deals: selectedDeals, radius: selectedDistance, sort: selectedSort, category: filters)
+        
+        // UserDefaults.saveCriteria(criteria: criterion)
         
         delegate.filterViewControllerChangeValue(filterVC: self, didUpdateFilter: criterion)
         
@@ -227,6 +233,21 @@ class FilterViewController: UIViewController {
         // Do any additional setup after loading the view.
         tblSetting.dataSource = self
         tblSetting.delegate = self
+        
+        
+        // let prevFilter = UserDefaults.loadCriteria()
+        if (criteria != nil) {
+            let prevFilter = criteria
+            selectedSort = (prevFilter?.sort!)!
+            selectedDistance = (prevFilter?.distance!)!
+            selectedDeals = (prevFilter?.isDeal!)!
+            
+            if((prevFilter?.categories?.count)!>0){
+                for code in (prevFilter?.categories!)! {
+                    switchStates[categories.index(where: { $0["code"] == code })!] = true
+                }
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -279,7 +300,7 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell", for: indexPath) as! SwitchCell
             cell.lblTitle.text = "Offering a Deal"
-            cell.switchCtrl.isOn = false
+            cell.switchCtrl.isOn = selectedDeals
             cell.delegate = self
             return cell
         case 1:
@@ -387,6 +408,13 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
 extension FilterViewController: SwitchCellDelegate {
     func switchCellDidSwitchChanged(_ switchCell: SwitchCell, didChangeValue value: Bool) {
         let ip = tblSetting.indexPath(for: switchCell)
-        switchStates[(ip?.row)!] = value
+        switch (ip!.section) {
+        case 0:
+            selectedDeals = value
+        case 3:
+            switchStates[((ip?.row)! - 2)] = value
+        default:
+            return
+        }
     }
 }
