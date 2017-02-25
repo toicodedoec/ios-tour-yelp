@@ -57,6 +57,13 @@ class BusinessesViewController: UIViewController {
         tblResult.insertSubview(refreshControl, at: 0)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let navVC = segue.destination as! UINavigationController
+        let filterVC = navVC.topViewController as! FilterViewController
+        
+        filterVC.delegate = self
+    }
+    
 }
 
 extension BusinessesViewController: UITableViewDelegate, UITableViewDataSource {
@@ -74,6 +81,23 @@ extension BusinessesViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+    }
+}
+
+extension BusinessesViewController: FilterViewControllerDelegate {
+    func filterViewControllerChangeValue(filterVC: FilterViewController, didUpdateFilter filter: [String]) {
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        Business.search(with: "", sort: nil, categories: filter, deals: nil) { (businesses: [Business]?, error: Error?) in
+            if let businesses = businesses {
+                self.businesses = businesses
+                
+                self.tblResult.reloadData()
+                self.refreshControl.endRefreshing()
+                
+                MBProgressHUD.hide(for: self.view, animated: true)
+                self.isStartup = false;
+            }
+            }
     }
 }
 

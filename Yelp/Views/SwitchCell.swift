@@ -9,7 +9,7 @@
 import UIKit
 
 @objc protocol SwitchCellDelegate {
-    @objc optional func switchCellDidSwitchChanged(_ switchCell: SwitchCell)
+    @objc optional func switchCellDidSwitchChanged(_ switchCell: SwitchCell, didChangeValue value: Bool)
 }
 
 class SwitchCell: UITableViewCell {
@@ -20,8 +20,8 @@ class SwitchCell: UITableViewCell {
     
     weak var delegate: SwitchCellDelegate?
     
-    @IBAction func switchValueChanged(_ sender: Any) {
-        delegate?.switchCellDidSwitchChanged?(self)
+    @IBAction func switchValueChanged(_ sender: UISwitch) {
+        delegate?.switchCellDidSwitchChanged?(self, didChangeValue: sender.isOn)
     }
     
     override func awakeFromNib() {
