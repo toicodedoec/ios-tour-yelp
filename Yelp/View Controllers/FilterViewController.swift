@@ -16,6 +16,10 @@ class FilterViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    var showAllCategories: Bool = false
+    var showAllDistances: Bool = false
+    var showAllSortConditions: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,6 +47,18 @@ class FilterViewController: UIViewController {
 }
 
 extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        switch (indexPath as NSIndexPath).section {
+        case 0: return 40
+        case 1: return indexPath.row > 0 ? (!showAllDistances ? 0 : 40) : 40
+        case 2: return indexPath.row > 0 ? (!showAllSortConditions ? 0 : 40) : 40
+        case 3: return indexPath.row > 5 ? (!showAllCategories ? 0 : 40) : 40
+        default: return 0
+        }
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 4
     }
@@ -67,22 +83,30 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         case 1:
             if (indexPath.row == 0) {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "seperatorCell", for: indexPath) as! SeperatorCell
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: "selectCell", for: indexPath) as! SelectCell
                 cell.lblTitle.text = "Distance"
+                cell.imgStatus.image = showAllDistances ? UIImage(named: "check") : UIImage(named: "arrow")
+                cell.imgStatus.isHidden = false
                 return cell
+                
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "selectCell", for: indexPath) as! SelectCell
                 cell.lblTitle.text = "Distance" + String(describing: indexPath.row)
+                cell.imgStatus.isHidden = true
                 return cell
             }
         case 2:
             if (indexPath.row == 0) {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "seperatorCell", for: indexPath) as! SeperatorCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "selectCell", for: indexPath) as! SelectCell
                 cell.lblTitle.text = "Sort By"
+                cell.imgStatus.image = showAllSortConditions ? UIImage(named: "check") : UIImage(named: "arrow")
+                cell.imgStatus.isHidden = false
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "selectCell", for: indexPath) as! SelectCell
                 cell.lblTitle.text = "By" + String(describing: indexPath.row)
+                cell.imgStatus.isHidden = true
                 return cell
             }
         case 3:
@@ -90,13 +114,57 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "seperatorCell", for: indexPath) as! SeperatorCell
                 cell.lblTitle.text = "Category"
                 return cell
+            } else if (indexPath.row == 5) {
+                if !showAllCategories {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "seperatorCell", for: indexPath) as! SeperatorCell
+                    cell.lblTitle.text = "Select All"
+                    return cell
+                } else {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell", for: indexPath) as! SwitchCell
+                    cell.lblTitle.text = "Category" + String(describing: indexPath.row)
+                    return cell
+                }
+            } else if (indexPath.row == 9) {
+                if showAllCategories {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "seperatorCell", for: indexPath) as! SeperatorCell
+                    cell.lblTitle.text = "Hide"
+                    return cell
+                } else {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell", for: indexPath) as! SwitchCell
+                    cell.lblTitle.text = "Category" + String(describing: indexPath.row)
+                    return cell
+                }
             } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "selectCell", for: indexPath) as! SelectCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell", for: indexPath) as! SwitchCell
                 cell.lblTitle.text = "Category" + String(describing: indexPath.row)
                 return cell
             }
         default:
-        return UITableViewCell()
+            return UITableViewCell()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch (indexPath as NSIndexPath).section {
+        case 1:
+            if indexPath.row == 0 {
+                showAllDistances = !showAllDistances
+                tblSetting.reloadSections(IndexSet(integer: 1), with: .automatic)
+                return
+            }
+        case 2:
+            if indexPath.row == 0 {
+                showAllSortConditions = !showAllSortConditions
+                tblSetting.reloadSections(IndexSet(integer: 2), with: .automatic)
+                return
+            }
+        case 3:
+            if indexPath.row == 5 || indexPath.row == 9 {
+                showAllCategories = !showAllCategories
+                tblSetting.reloadSections(IndexSet(integer: 3), with: .automatic)
+                return
+            }
+        default: return
         }
     }
 }
