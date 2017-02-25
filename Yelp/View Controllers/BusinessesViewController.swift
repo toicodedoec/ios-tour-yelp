@@ -97,7 +97,7 @@ extension BusinessesViewController: FilterViewControllerDelegate {
                 MBProgressHUD.hide(for: self.view, animated: true)
                 self.isStartup = false;
             }
-            }
+        }
     }
 }
 

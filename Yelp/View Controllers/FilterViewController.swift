@@ -184,7 +184,15 @@ class FilterViewController: UIViewController {
                                                     ["name" : "Wraps", "code": "wraps"],
                                                     ["name" : "Yugoslav", "code": "yugoslav"]]
     
+    let sorts = [["name" : "Best matched", "code" : "0"],["name" : "Distance", "code" : "1"],["name" : "Highest Rated", "code" : "2"]]
+    
+    let distances = [["name" : "Auto", "code" : "0"],["name" : "0.3 miles", "code" : "1"],["name" : "1 mile", "code" : "2"],["name" : "5 miles", "code" : "3"],["name" : "20 miles", "code" : "4"]]
+    
     var switchStates = [Int: Bool]()
+    
+    var selectedSort = 0
+    
+    var selectedDistance = 0
     
     var delegate: FilterViewControllerDelegate!
     
@@ -259,8 +267,8 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: return 1
-        case 1: return 5
-        case 2: return 5
+        case 1: return distances.count + 1
+        case 2: return sorts.count + 1
         case 3: return categories.count + 3
         default: return 0
         }
@@ -281,14 +289,15 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
                 return cell
             } else if (indexPath.row == 1) {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "selectCell", for: indexPath) as! SelectCell
-                cell.lblTitle.text = "Previous Value"
+                cell.lblTitle.text = showAllDistances ? distances[0]["name"] : distances[selectedDistance]["name"]
                 cell.imgStatus.image = showAllDistances ? UIImage(named: "check") : UIImage(named: "arrow")
-                cell.imgStatus.isHidden = false
+                cell.imgStatus.isHidden = showAllDistances ? !(indexPath.row - 1 == selectedDistance) : false
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "selectCell", for: indexPath) as! SelectCell
-                cell.lblTitle.text = "Distance" + String(describing: indexPath.row)
-                cell.imgStatus.isHidden = true
+                cell.lblTitle.text = distances[indexPath.row - 1]["name"]
+                cell.imgStatus.image = UIImage(named: "check")
+                cell.imgStatus.isHidden = !(indexPath.row - 1 == selectedDistance)
                 return cell
             }
         case 2:
@@ -298,14 +307,15 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
                 return cell
             } else if (indexPath.row == 1) {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "selectCell", for: indexPath) as! SelectCell
-                cell.lblTitle.text = "Previous Value"
+                cell.lblTitle.text = showAllSortConditions ? sorts[0]["name"] : sorts[selectedSort]["name"]
                 cell.imgStatus.image = showAllSortConditions ? UIImage(named: "check") : UIImage(named: "arrow")
-                cell.imgStatus.isHidden = false
+                cell.imgStatus.isHidden = showAllSortConditions ? !(indexPath.row - 1 == selectedSort) : false
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "selectCell", for: indexPath) as! SelectCell
-                cell.lblTitle.text = "By" + String(describing: indexPath.row)
-                cell.imgStatus.isHidden = true
+                cell.lblTitle.text = sorts[indexPath.row - 1]["name"]
+                cell.imgStatus.image = UIImage(named: "check")
+                cell.imgStatus.isHidden = !(indexPath.row - 1 == selectedSort)
                 return cell
             }
         case 3:
@@ -354,17 +364,15 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch (indexPath as NSIndexPath).section {
         case 1:
-            if indexPath.row == 1 {
-                showAllDistances = !showAllDistances
-                tblSetting.reloadSections(IndexSet(integer: 1), with: .automatic)
-                return
-            }
+            selectedDistance = !showAllDistances ? selectedDistance : indexPath.row - 1
+            showAllDistances = !showAllDistances
+            tblSetting.reloadSections(IndexSet(integer: 1), with: .automatic)
+            return
         case 2:
-            if indexPath.row == 1 {
-                showAllSortConditions = !showAllSortConditions
-                tblSetting.reloadSections(IndexSet(integer: 2), with: .automatic)
-                return
-            }
+            selectedSort = !showAllSortConditions ? selectedSort : indexPath.row - 1
+            showAllSortConditions = !showAllSortConditions
+            tblSetting.reloadSections(IndexSet(integer: 2), with: .automatic)
+            return
         case 3:
             if indexPath.row == 7 || indexPath.row == categories.count + 2 {
                 showAllCategories = !showAllCategories
