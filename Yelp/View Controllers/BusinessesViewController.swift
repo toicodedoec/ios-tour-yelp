@@ -85,9 +85,9 @@ extension BusinessesViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension BusinessesViewController: FilterViewControllerDelegate {
-    func filterViewControllerChangeValue(filterVC: FilterViewController, didUpdateFilter filter: [String]) {
+    func filterViewControllerChangeValue(filterVC: FilterViewController, didUpdateFilter filter: Filter) {
         MBProgressHUD.showAdded(to: self.view, animated: true)
-        Business.search(with: "", sort: nil, categories: filter, deals: nil) { (businesses: [Business]?, error: Error?) in
+        Business.search(with: "", sort: filter.sort.map { YelpSortMode(rawValue: $0) }!, categories: filter.categories, deals: filter.isDeal) { (businesses: [Business]?, error: Error?) in
             if let businesses = businesses {
                 self.businesses = businesses
                 

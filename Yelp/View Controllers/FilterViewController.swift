@@ -9,7 +9,7 @@
 import UIKit
 
 protocol FilterViewControllerDelegate  {
-    func filterViewControllerChangeValue(filterVC: FilterViewController, didUpdateFilter filter: [String])
+    func filterViewControllerChangeValue(filterVC: FilterViewController, didUpdateFilter filter: Filter)
 }
 
 class FilterViewController: UIViewController {
@@ -209,10 +209,10 @@ class FilterViewController: UIViewController {
                 filters.append(categories[row]["code"]!)
             }
         }
-        print(filters)
-        if(!filters.isEmpty){
-            delegate.filterViewControllerChangeValue(filterVC: self, didUpdateFilter: filters)
-        }
+        
+        let criterion = Filter(deals: true, radius: selectedDistance, sort: selectedSort, category: filters)
+        
+        delegate.filterViewControllerChangeValue(filterVC: self, didUpdateFilter: criterion)
         
         dismiss(animated: true, completion: nil)
     }
