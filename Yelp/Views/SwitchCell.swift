@@ -8,24 +8,24 @@
 
 import UIKit
 
+@objc protocol SwitchCellDelegate {
+    @objc optional func switchCellDidSwitchChanged(_ switchCell: SwitchCell)
+}
+
 class SwitchCell: UITableViewCell {
 
     @IBOutlet weak var lblTitle: UILabel!
     
     @IBOutlet weak var switchCtrl: UISwitch!
     
+    weak var delegate: SwitchCellDelegate?
+    
     @IBAction func switchValueChanged(_ sender: Any) {
+        delegate?.switchCellDidSwitchChanged?(self)
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
 }
