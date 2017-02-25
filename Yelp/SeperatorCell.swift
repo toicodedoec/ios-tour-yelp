@@ -1,5 +1,5 @@
 //
-//  SelectCell.swift
+//  SeperatorCell.swift
 //  Yelp
 //
 //  Created by john on 2/25/17.
@@ -8,8 +8,10 @@
 
 import UIKit
 
-class SelectCell: UITableViewCell {
+class SeperatorCell: UITableViewCell {
 
+    @IBOutlet weak var lblTitle: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
