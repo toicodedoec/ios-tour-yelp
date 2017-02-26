@@ -183,26 +183,23 @@ class FilterViewController: UIViewController {
                                                     ["name" : "Wok", "code": "wok"],
                                                     ["name" : "Wraps", "code": "wraps"],
                                                     ["name" : "Yugoslav", "code": "yugoslav"]]
-    
     let sorts = [["name" : "Best matched", "code" : "0"],["name" : "Distance", "code" : "1"],["name" : "Highest Rated", "code" : "2"]]
-    
     let distances = [["name" : "Auto", "code" : "0"],["name" : "0.3 miles", "code" : "1"],["name" : "1 mile", "code" : "2"],["name" : "5 miles", "code" : "3"],["name" : "20 miles", "code" : "4"]]
     
+    var filteredCategories: [Dictionary<String, String>] = []
     var switchStates = [String: Bool]()
-    
     var selectedSort = 0
-    
     var selectedDistance = 0
-    
     var selectedDeals = false
-    
     var selectedSearchCategoryKey = ""
-    
-    var delegate: FilterViewControllerDelegate!
     
     var criteria: Filter?
     
-    var filteredCategories: [Dictionary<String, String>] = []
+    var showAllCategories: Bool = false
+    var showAllDistances: Bool = false
+    var showAllSortConditions: Bool = false
+    
+    var delegate: FilterViewControllerDelegate!
     
     @IBOutlet weak var tblSetting: UITableView!
     
@@ -218,18 +215,15 @@ class FilterViewController: UIViewController {
             }
         }
         
-        let criterion: Filter = Filter(deals: selectedDeals, radius: selectedDistance, sort: selectedSort, category: filters)
+        let filter = Filter(deals: selectedDeals, radius: selectedDistance, sort: selectedSort, category: filters)
         
-        // UserDefaults.saveCriteria(criteria: criterion)
+        // TODO: Error @here Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[Yelp.Filter encodeWithCoder:]: unrecognized selector sent to instance
+        // UserDefaults.saveCriteria(criteria: filter)
         
-        delegate.filterViewControllerChangeValue(filterVC: self, didUpdateFilter: criterion)
+        delegate.filterViewControllerChangeValue(filterVC: self, didUpdateFilter: filter)
         
         dismiss(animated: true, completion: nil)
     }
-    
-    var showAllCategories: Bool = false
-    var showAllDistances: Bool = false
-    var showAllSortConditions: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -240,15 +234,14 @@ class FilterViewController: UIViewController {
         
         filteredCategories = categories
         
-        // let prevFilter = UserDefaults.loadCriteria()
-        if (criteria != nil) {
-            let prevFilter = criteria
-            selectedSort = (prevFilter?.sort!)!
-            selectedDistance = (prevFilter?.distance!)!
-            selectedDeals = (prevFilter?.isDeal!)!
+        // restore the previous filter settings
+        if let prevFilter = criteria {
+            selectedSort = prevFilter.sort!
+            selectedDistance = prevFilter.distance!
+            selectedDeals = prevFilter.isDeal!
             
-            if((prevFilter?.categories?.count)!>0){
-                for code in (prevFilter?.categories!)! {
+            if prevFilter.categories!.count > 0 {
+                for code in prevFilter.categories! {
                     switchStates[code] = true
                 }
             }
@@ -259,29 +252,16 @@ class FilterViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
 }
 
 extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
         switch (indexPath as NSIndexPath).section {
-        case 0: return 40
-        case 1: return indexPath.row > 1 ? (!showAllDistances ? 0 : 40) : 40
-        case 2: return indexPath.row > 1 ? (!showAllSortConditions ? 0 : 40) : 40
-        case 3: return indexPath.row > 7 ? (!showAllCategories ? 0 : 40) : 40
+        case 0: return CGFloat(Const.Standard_Row_Height)
+        case 1: return indexPath.row > 1 ? (!showAllDistances ? 0 : CGFloat(Const.Standard_Row_Height)) : CGFloat(Const.Standard_Row_Height)
+        case 2: return indexPath.row > 1 ? (!showAllSortConditions ? 0 : CGFloat(Const.Standard_Row_Height)) : CGFloat(Const.Standard_Row_Height)
+        case 3: return indexPath.row > 7 ? (!showAllCategories ? 0 : CGFloat(Const.Standard_Row_Height)) : CGFloat(Const.Standard_Row_Height)
         default: return 0
         }
     }
@@ -303,24 +283,24 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch (indexPath.section) {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell", for: indexPath) as! SwitchCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: Const.Indentifier_Switch_Cell, for: indexPath) as! SwitchCell
             cell.lblTitle.text = "Offering a Deal"
             cell.switchCtrl.isOn = selectedDeals
             cell.delegate = self
             return cell
         case 1:
             if(indexPath.row == 0) {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "seperatorCell", for: indexPath) as! SeperatorCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: Const.Indentifier_Seperator_Cell, for: indexPath) as! SeperatorCell
                 cell.lblTitle.text = "Distance"
                 return cell
             } else if (indexPath.row == 1) {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "selectCell", for: indexPath) as! SelectCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: Const.Indentifier_Select_Cell, for: indexPath) as! SelectCell
                 cell.lblTitle.text = showAllDistances ? distances[0]["name"] : distances[selectedDistance]["name"]
                 cell.imgStatus.image = showAllDistances ? UIImage(named: "check") : UIImage(named: "arrow")
                 cell.imgStatus.isHidden = showAllDistances ? !(indexPath.row - 1 == selectedDistance) : false
                 return cell
             } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "selectCell", for: indexPath) as! SelectCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: Const.Indentifier_Select_Cell, for: indexPath) as! SelectCell
                 cell.lblTitle.text = distances[indexPath.row - 1]["name"]
                 cell.imgStatus.image = UIImage(named: "check")
                 cell.imgStatus.isHidden = !(indexPath.row - 1 == selectedDistance)
@@ -328,17 +308,17 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
             }
         case 2:
             if(indexPath.row == 0) {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "seperatorCell", for: indexPath) as! SeperatorCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: Const.Indentifier_Seperator_Cell, for: indexPath) as! SeperatorCell
                 cell.lblTitle.text = "Sort By"
                 return cell
             } else if (indexPath.row == 1) {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "selectCell", for: indexPath) as! SelectCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: Const.Indentifier_Select_Cell, for: indexPath) as! SelectCell
                 cell.lblTitle.text = showAllSortConditions ? sorts[0]["name"] : sorts[selectedSort]["name"]
                 cell.imgStatus.image = showAllSortConditions ? UIImage(named: "check") : UIImage(named: "arrow")
                 cell.imgStatus.isHidden = showAllSortConditions ? !(indexPath.row - 1 == selectedSort) : false
                 return cell
             } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "selectCell", for: indexPath) as! SelectCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: Const.Indentifier_Select_Cell, for: indexPath) as! SelectCell
                 cell.lblTitle.text = sorts[indexPath.row - 1]["name"]
                 cell.imgStatus.image = UIImage(named: "check")
                 cell.imgStatus.isHidden = !(indexPath.row - 1 == selectedSort)
@@ -346,24 +326,24 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
             }
         case 3:
             if (indexPath.row == 0) {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "seperatorCell", for: indexPath) as! SeperatorCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: Const.Indentifier_Seperator_Cell, for: indexPath) as! SeperatorCell
                 cell.lblTitle.text = "Category"
                 return cell
             } else if (indexPath.row == 1) {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "searchCell", for: indexPath) as! SearchCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: Const.Indentifier_Search_Cell, for: indexPath) as! SearchCell
                 cell.searchBar.text = selectedSearchCategoryKey
                 cell.delegate = self
                 return cell
             } else if (indexPath.row == 7) {
                 if !showAllCategories {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "seperatorCell", for: indexPath) as! SeperatorCell
+                    let cell = tableView.dequeueReusableCell(withIdentifier: Const.Indentifier_Seperator_Cell, for: indexPath) as! SeperatorCell
                     cell.lblTitle.text = "See All"
                     cell.lblTitle.textColor = UIColor.lightGray
                     cell.backgroundColor = UIColor.white
                     cell.lblTitle.frame.origin.x = 15
                     return cell
                 } else {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell", for: indexPath) as! SwitchCell
+                    let cell = tableView.dequeueReusableCell(withIdentifier: Const.Indentifier_Switch_Cell, for: indexPath) as! SwitchCell
                     cell.lblTitle.text = filteredCategories[indexPath.row - 2]["name"]
                     cell.switchCtrl.isOn = switchStates[filteredCategories[indexPath.row - 2]["code"]!] ?? false
                     cell.delegate = self
@@ -371,21 +351,21 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
                 }
             } else if (indexPath.row == filteredCategories.count + 2) {
                 if showAllCategories {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "seperatorCell", for: indexPath) as! SeperatorCell
+                    let cell = tableView.dequeueReusableCell(withIdentifier: Const.Indentifier_Seperator_Cell, for: indexPath) as! SeperatorCell
                     cell.lblTitle.text = "Hide"
                     cell.lblTitle.textColor = UIColor.lightGray
                     cell.backgroundColor = UIColor.white
                     cell.lblTitle.frame.origin.x = 15
                     return cell
                 } else {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell", for: indexPath) as! SwitchCell
+                    let cell = tableView.dequeueReusableCell(withIdentifier: Const.Indentifier_Switch_Cell, for: indexPath) as! SwitchCell
                     cell.lblTitle.text = filteredCategories[indexPath.row - 3]["name"]
                     cell.switchCtrl.isOn = switchStates[filteredCategories[indexPath.row - 3]["code"]!] ?? false
                     cell.delegate = self
                     return cell
                 }
             } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell", for: indexPath) as! SwitchCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: Const.Indentifier_Switch_Cell, for: indexPath) as! SwitchCell
                 cell.lblTitle.text = filteredCategories[indexPath.row - 2]["name"]
                 cell.switchCtrl.isOn = switchStates[filteredCategories[indexPath.row - 2]["code"]!] ?? false
                 cell.delegate = self
@@ -416,6 +396,13 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
             }
         default: return
         }
+    }
+    
+    private func setLinkCellStyle(cell: SeperatorCell) -> SeperatorCell {
+        cell.lblTitle.textColor = UIColor.lightGray
+        cell.backgroundColor = UIColor.white
+        cell.lblTitle.frame.origin.x = 15
+        return cell
     }
 }
 

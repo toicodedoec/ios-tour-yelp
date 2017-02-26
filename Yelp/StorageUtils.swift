@@ -11,7 +11,8 @@ import Foundation
 extension UserDefaults {
     
     class func saveCriteria(criteria: Filter) {
-        UserDefaults.standard.set(criteria, forKey: Const.Criteria_Key)
+        let data = NSKeyedArchiver.archivedData(withRootObject: criteria)
+        UserDefaults.standard.set(data, forKey: Const.Criteria_Key)
     }
     
     class func loadCriteria() -> Filter {

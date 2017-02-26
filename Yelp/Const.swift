@@ -25,4 +25,14 @@ class Const {
     static let Standard_Spacing = 10
     
     static let Standard_Height = 30
+    
+    static let Standard_Row_Height = 40
+    
+    static let Indentifier_Seperator_Cell = "seperatorCell"
+    
+    static let Indentifier_Switch_Cell = "switchCell"
+    
+    static let Indentifier_Select_Cell = "selectCell"
+    
+    static let Indentifier_Search_Cell = "searchCell"
 }
