@@ -188,7 +188,7 @@ class FilterViewController: UIViewController {
     
     let distances = [["name" : "Auto", "code" : "0"],["name" : "0.3 miles", "code" : "1"],["name" : "1 mile", "code" : "2"],["name" : "5 miles", "code" : "3"],["name" : "20 miles", "code" : "4"]]
     
-    var switchStates = [Int: Bool]()
+    var switchStates = [String: Bool]()
     
     var selectedSort = 0
     
@@ -196,9 +196,13 @@ class FilterViewController: UIViewController {
     
     var selectedDeals = false
     
+    var selectedSearchCategoryKey = ""
+    
     var delegate: FilterViewControllerDelegate!
     
     var criteria: Filter?
+    
+    var filteredCategories: [Dictionary<String, String>] = []
     
     @IBOutlet weak var tblSetting: UITableView!
     
@@ -208,9 +212,9 @@ class FilterViewController: UIViewController {
     
     @IBAction func save(_ sender: Any) {
         var filters = [String]()
-        for (row, isSelected) in switchStates {
+        for (code, isSelected) in switchStates {
             if isSelected {
-                filters.append(categories[row]["code"]!)
+                filters.append(code)
             }
         }
         
@@ -234,6 +238,7 @@ class FilterViewController: UIViewController {
         tblSetting.dataSource = self
         tblSetting.delegate = self
         
+        filteredCategories = categories
         
         // let prevFilter = UserDefaults.loadCriteria()
         if (criteria != nil) {
@@ -244,7 +249,7 @@ class FilterViewController: UIViewController {
             
             if((prevFilter?.categories?.count)!>0){
                 for code in (prevFilter?.categories!)! {
-                    switchStates[categories.index(where: { $0["code"] == code })!] = true
+                    switchStates[code] = true
                 }
             }
         }
@@ -290,7 +295,7 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
         case 0: return 1
         case 1: return distances.count + 1
         case 2: return sorts.count + 1
-        case 3: return categories.count + 3
+        case 3: return filteredCategories.count + 3
         default: return 0
         }
     }
@@ -345,7 +350,10 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
                 cell.lblTitle.text = "Category"
                 return cell
             } else if (indexPath.row == 1) {
-                return tableView.dequeueReusableCell(withIdentifier: "searchCell", for: indexPath) as! SearchCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "searchCell", for: indexPath) as! SearchCell
+                cell.searchBar.text = selectedSearchCategoryKey
+                cell.delegate = self
+                return cell
             } else if (indexPath.row == 7) {
                 if !showAllCategories {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "seperatorCell", for: indexPath) as! SeperatorCell
@@ -353,27 +361,27 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell", for: indexPath) as! SwitchCell
-                    cell.lblTitle.text = categories[indexPath.row - 2]["name"]
-                    cell.switchCtrl.isOn = switchStates[indexPath.row - 2] ?? false
+                    cell.lblTitle.text = filteredCategories[indexPath.row - 2]["name"]
+                    cell.switchCtrl.isOn = switchStates[filteredCategories[indexPath.row - 2]["code"]!] ?? false
                     cell.delegate = self
                     return cell
                 }
-            } else if (indexPath.row == categories.count + 2) {
+            } else if (indexPath.row == filteredCategories.count + 2) {
                 if showAllCategories {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "seperatorCell", for: indexPath) as! SeperatorCell
                     cell.lblTitle.text = "Hide"
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell", for: indexPath) as! SwitchCell
-                    cell.lblTitle.text = categories[indexPath.row - 3]["name"]
-                    cell.switchCtrl.isOn = switchStates[indexPath.row - 3] ?? false
+                    cell.lblTitle.text = filteredCategories[indexPath.row - 3]["name"]
+                    cell.switchCtrl.isOn = switchStates[filteredCategories[indexPath.row - 3]["code"]!] ?? false
                     cell.delegate = self
                     return cell
                 }
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell", for: indexPath) as! SwitchCell
-                cell.lblTitle.text = categories[indexPath.row - 2]["name"]
-                cell.switchCtrl.isOn = switchStates[indexPath.row - 2] ?? false
+                cell.lblTitle.text = filteredCategories[indexPath.row - 2]["name"]
+                cell.switchCtrl.isOn = switchStates[filteredCategories[indexPath.row - 2]["code"]!] ?? false
                 cell.delegate = self
                 return cell
             }
@@ -395,7 +403,7 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
             tblSetting.reloadSections(IndexSet(integer: 2), with: .automatic)
             return
         case 3:
-            if indexPath.row == 7 || indexPath.row == categories.count + 2 {
+            if indexPath.row == 7 || indexPath.row == filteredCategories.count + 2 {
                 showAllCategories = !showAllCategories
                 tblSetting.reloadSections(IndexSet(integer: 3), with: .automatic)
                 return
@@ -412,7 +420,21 @@ extension FilterViewController: SwitchCellDelegate {
         case 0:
             selectedDeals = value
         case 3:
-            switchStates[((ip?.row)! - 2)] = value
+            switchStates[filteredCategories[((ip?.row)! - 2)]["code"]!] = value
+        default:
+            return
+        }
+    }
+}
+
+extension FilterViewController: SearchCellDelegate {
+    func searchCellDidTextChanged(_ searchCell: SearchCell, didChangeValue value: String) {
+        let ip = tblSetting.indexPath(for: searchCell)
+        switch (ip!.section) {
+        case 3:
+            selectedSearchCategoryKey = value
+            filteredCategories = value.isEmpty ? categories : categories.filter { return ($0["name"]?.contains(value))!}
+            tblSetting.reloadSections(IndexSet(integer: 3), with: .automatic)
         default:
             return
         }
