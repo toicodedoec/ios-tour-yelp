@@ -31,34 +31,42 @@ class BusinessDetailViewController: UIViewController {
         lblReview.text = (businessDetail.reviewCount?.stringValue)! + " Reviews"
         imgStar.setImageWith(businessDetail.ratingImageURL!)
         
-        var x = imgStar.frame.origin.x
-        let y = imgStar.frame.origin.y + imgStar.frame.size.height + 10
+        // Generate the tags of category information
+        var tagX:CGFloat = imgStar.frame.origin.x
+        var tagY:CGFloat = imgStar.frame.origin.y + imgStar.frame.size.height
+        
         for cat in (businessDetail.categories?.components(separatedBy: ","))! {
-            let view = UIView(frame: CGRect(x: 10, y: 300, width: cat.characters.count * 10, height: 30))
-            view.frame.origin.x = x
-            view.frame.origin.y = y
+            let view = UIView(frame: CGRect())
             
             let label = UILabel()
-            label.text = "ℹ️️" + cat
+            label.text = Const.Tag_Symbol + cat
             label.font = label.font.withSize(15)
             label.textColor = UIColor.white
             label.sizeToFit()
             
-            view.frame.size.width = label.frame.size.width + 10
             view.backgroundColor = UIColor.orange
-            
             view.layer.borderWidth = 1
             view.layer.borderColor = UIColor.darkGray.cgColor
+            
+            view.frame.size.width = label.frame.size.width + CGFloat(Const.Standard_Spacing)
+            view.frame.size.height = CGFloat(Const.Standard_Height)
             
             label.frame.origin.x = (view.frame.size.width - label.frame.size.width)/2
             label.frame.origin.y = (view.frame.size.height - label.frame.size.height)/2
             
+            if tagX + view.frame.size.width + CGFloat(Const.Standard_Spacing) > UIScreen.main.bounds.width {
+                tagX = CGFloat(Const.Standard_Spacing)
+                tagY += CGFloat(Const.Standard_Spacing)
+            }
+            
+            view.frame.origin.x = tagX
+            view.frame.origin.y = tagY + CGFloat(Const.Standard_Spacing)
+            
             view.addSubview(label)
             self.view.addSubview(view)
             
-            x += view.frame.size.width + 5
+            tagX += view.frame.size.width + CGFloat(Const.Standard_Spacing)
         }
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -70,16 +78,4 @@ class BusinessDetailViewController: UIViewController {
         let mapVC = segue.destination as! BusinessMapViewController
         mapVC.selectedBusiness = self.businessDetail
     }
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
 }

@@ -14,8 +14,6 @@ class BusinessMapViewController: UIViewController, CLLocationManagerDelegate, MK
 
     @IBOutlet weak var mapView: MKMapView!
     
-    var locationManager : CLLocationManager!
-    
     var selectedBusiness: Business?
     
     override func viewDidLoad() {
@@ -27,10 +25,9 @@ class BusinessMapViewController: UIViewController, CLLocationManagerDelegate, MK
         let centerLocation = CLLocation(latitude: (selectedBusiness?.latitude)!, longitude: (selectedBusiness?.longitude)!)
         goToLocation(location: centerLocation)
         
-        // draw circular overlay centered in San Francisco
-        let circleOverlay: MKCircle = MKCircle(center: centerLocation.coordinate, radius: 1000)
+        // draw circular overlay centered in the restaurant
+        let circleOverlay: MKCircle = MKCircle(center: centerLocation.coordinate, radius: Double(Const.Radius_Of_Circular_Overlay))
         mapView.addOverlays([circleOverlay])
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -60,15 +57,4 @@ class BusinessMapViewController: UIViewController, CLLocationManagerDelegate, MK
         circleView.lineWidth = 1
         return circleView
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
