@@ -56,7 +56,7 @@ class BusinessDetailViewController: UIViewController {
             
             if tagX + view.frame.size.width + CGFloat(Const.Standard_Spacing) > UIScreen.main.bounds.width {
                 tagX = CGFloat(Const.Standard_Spacing)
-                tagY += CGFloat(Const.Standard_Spacing)
+                tagY += view.frame.size.height + CGFloat(Const.Standard_Spacing)
             }
             
             view.frame.origin.x = tagX

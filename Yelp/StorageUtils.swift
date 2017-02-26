@@ -1,8 +1,8 @@
 //
 //  StorageUtils.swift
-//  Flicks
+//  Yelp
 //
-//  Created by john on 2/19/17.
+//  Created by john on 2/25/17.
 //  Copyright © 2017 doannx. All rights reserved.
 //
 
@@ -16,20 +16,11 @@ extension UserDefaults {
     }
     
     class func loadCriteria() -> Filter {
-        if let _ = UserDefaults.standard.object(forKey: Const.Criteria_Key) {
-            return UserDefaults.standard.object(forKey: Const.Criteria_Key) as! Filter;
-        }
-        return Filter(deals: false, radius: 0, sort: 0, category: [String]())
+        return (UserDefaults.standard.object(forKey: Const.Criteria_Key) != nil) ? UserDefaults.standard.object(forKey: Const.Criteria_Key) as! Filter : Filter(deals: false, radius: 0, sort: 0, category: [String]())
     }
     
     class func loadSearchValue() -> String {
-        let lastActive = UserDefaults.standard.integer(forKey: Const.Last_Active_Key)
-        let now = Date()
-        
-        if(Int(now.timeIntervalSince1970) - lastActive <= Const.Time_Out_Value) {
-            return UserDefaults.standard.string(forKey: Const.Search_Value_Key)!
-        }
-        return ""
+        return Int(Date().timeIntervalSince1970) - UserDefaults.standard.integer(forKey: Const.Last_Active_Key) <= Const.Time_Out_Value ? UserDefaults.standard.string(forKey: Const.Search_Value_Key)! : Const.Empty_String
     }
     
     class func saveSearchValue(lastSearchValue: String) {

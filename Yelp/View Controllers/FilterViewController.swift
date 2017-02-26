@@ -191,7 +191,7 @@ class FilterViewController: UIViewController {
     var selectedSort = 0
     var selectedDistance = 0
     var selectedDeals = false
-    var selectedSearchCategoryKey = ""
+    var selectedSearchCategoryKey = Const.Empty_String
     
     var criteria: Filter?
     

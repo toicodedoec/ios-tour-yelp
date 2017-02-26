@@ -35,4 +35,6 @@ class Const {
     static let Indentifier_Select_Cell = "selectCell"
     
     static let Indentifier_Search_Cell = "searchCell"
+    
+    static let Empty_String = ""
 }

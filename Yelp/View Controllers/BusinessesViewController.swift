@@ -13,17 +13,15 @@ class BusinessesViewController: UIViewController {
     
     @IBOutlet weak var tblResult: UITableView!
     @IBOutlet weak var searchBarCtrl: UISearchBar!
-    
     let refreshControl = UIRefreshControl()
     
     var businesses: [Business]!
     var filteredBusinesses: [Business]!
+    var selectedBusiness: Business?
     
     var isStartup: Bool = true;
     
     var prevFilter: Filter?
-    
-    var selectedBusiness: Business?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,21 +32,17 @@ class BusinessesViewController: UIViewController {
         searchBarCtrl.delegate = self
         self.navigationItem.titleView = searchBarCtrl
         
-        isStartup = true;
-        
         setupRefreshControl()
         
         loadData()
-        
     }
     
     func loadData(){
-        if(isStartup){
-            // display loading indicator
+        if isStartup {
             MBProgressHUD.showAdded(to: self.view, animated: true)
         }
         
-        Business.search(with: "Thai") { (businesses: [Business]?, error: Error?) in
+        Business.search(with: Const.Empty_String) { (businesses: [Business]?, error: Error?) in
             if let businesses = businesses {
                 self.businesses = businesses
                 
@@ -61,10 +55,13 @@ class BusinessesViewController: UIViewController {
                 self.searchBarCtrl.text = lastSearchValue
                 
                 self.tblResult.reloadData()
+                
                 self.refreshControl.endRefreshing()
                 
-                MBProgressHUD.hide(for: self.view, animated: true)
-                self.isStartup = false;
+                if self.isStartup {
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                    self.isStartup = false;
+                }
             }
         }
     }
@@ -86,7 +83,6 @@ class BusinessesViewController: UIViewController {
             nextVC.businessDetail = selectedBusiness
         }
     }
-    
 }
 
 extension BusinessesViewController: UITableViewDelegate, UITableViewDataSource {
@@ -116,11 +112,11 @@ extension BusinessesViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension BusinessesViewController: FilterViewControllerDelegate {
-    
     func filterViewControllerChangeValue(filterVC: FilterViewController, didUpdateFilter filter: Filter) {
         prevFilter = filter
         MBProgressHUD.showAdded(to: self.view, animated: true)
-        Business.search(with: "", sort: filter.sort.map { YelpSortMode(rawValue: $0) }!, categories: filter.categories, deals: filter.isDeal) { (businesses: [Business]?, error: Error?) in
+        Business.search(with: Const.Empty_String, sort: filter.sort.map { YelpSortMode(rawValue: $0) }!, categories: filter.categories, deals: filter.isDeal) { (businesses: [Business]?, error: Error?) in
+            
             if let businesses = businesses {
                 self.businesses = businesses
                 
@@ -133,23 +129,21 @@ extension BusinessesViewController: FilterViewControllerDelegate {
                 self.searchBarCtrl.text = lastSearchValue
                 
                 self.tblResult.reloadData()
-                self.refreshControl.endRefreshing()
                 
                 MBProgressHUD.hide(for: self.view, animated: true)
-                self.isStartup = false;
             }
         }
     }
 }
 
 extension BusinessesViewController: UISearchBarDelegate {
-    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
         filteredBusinesses = searchText.isEmpty ? businesses : businesses.filter { (item: Business) -> Bool in
             return (item.name?.contains(searchText))!
         }
         
-        // UserDefaults.standard.saveSearchValue(lastSearchValue: searchText)
+        UserDefaults.saveSearchValue(lastSearchValue: searchText)
         
         tblResult.reloadData()
     }
@@ -164,13 +158,14 @@ extension BusinessesViewController: UISearchBarDelegate {
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
         searchBarCtrl.showsCancelButton = false
-        searchBarCtrl.text = ""
+        searchBarCtrl.text = Const.Empty_String
         searchBarCtrl.resignFirstResponder()
         
         filteredBusinesses = businesses
         
-        // UserDefaults.standard.saveSearchValue(lastSearchValue: "")
+        UserDefaults.saveSearchValue(lastSearchValue: Const.Empty_String)
         
         tblResult.reloadData()
     }
