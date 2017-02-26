@@ -357,7 +357,10 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
             } else if (indexPath.row == 7) {
                 if !showAllCategories {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "seperatorCell", for: indexPath) as! SeperatorCell
-                    cell.lblTitle.text = "Select All"
+                    cell.lblTitle.text = "See All"
+                    cell.lblTitle.textColor = UIColor.lightGray
+                    cell.backgroundColor = UIColor.white
+                    cell.lblTitle.frame.origin.x = 15
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell", for: indexPath) as! SwitchCell
@@ -370,6 +373,9 @@ extension FilterViewController: UITableViewDataSource, UITableViewDelegate {
                 if showAllCategories {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "seperatorCell", for: indexPath) as! SeperatorCell
                     cell.lblTitle.text = "Hide"
+                    cell.lblTitle.textColor = UIColor.lightGray
+                    cell.backgroundColor = UIColor.white
+                    cell.lblTitle.frame.origin.x = 15
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "switchCell", for: indexPath) as! SwitchCell

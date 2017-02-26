@@ -44,7 +44,7 @@ class BusinessDetailViewController: UIViewController {
             label.textColor = UIColor.white
             label.sizeToFit()
             
-            view.frame.size.width = label.frame.size.width + 5
+            view.frame.size.width = label.frame.size.width + 10
             view.backgroundColor = UIColor.orange
             
             view.layer.borderWidth = 1

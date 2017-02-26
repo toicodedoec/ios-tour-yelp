@@ -213,7 +213,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="seperatorCellLbl" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CEC-4I-1E3">
-                                                    <rect key="frame" x="0.0" y="7" width="126" height="30"/>
+                                                    <rect key="frame" x="5" y="7" width="126" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="PgD-31-ON1"/>
                                                     </constraints>
@@ -223,7 +223,7 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="CEC-4I-1E3" firstAttribute="leading" secondItem="fbD-yp-dkf" secondAttribute="leading" id="1S1-5r-erE"/>
+                                                <constraint firstItem="CEC-4I-1E3" firstAttribute="leading" secondItem="fbD-yp-dkf" secondAttribute="leading" constant="5" id="bQl-Dr-Hs9"/>
                                                 <constraint firstItem="CEC-4I-1E3" firstAttribute="centerY" secondItem="fbD-yp-dkf" secondAttribute="centerY" id="c32-8d-QDs"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -248,7 +248,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="2E0B6955-380F-4532-9447-5F0F75DC6D7D" translatesAutoresizingMaskIntoConstraints="NO" id="JaW-z2-2Id">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="2C5697DC-B135-4B33-BBDE-3DE0C57411B4" translatesAutoresizingMaskIntoConstraints="NO" id="JaW-z2-2Id">
                                                     <rect key="frame" x="320" y="7" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="30" id="J5J-Uc-6zq"/>
@@ -455,7 +455,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="2E0B6955-380F-4532-9447-5F0F75DC6D7D" width="250" height="250">
+        <image name="2C5697DC-B135-4B33-BBDE-3DE0C57411B4" width="250" height="250">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
