@@ -29,6 +29,9 @@ class BusinessesViewController: UIViewController {
         tblResult.dataSource = self
         tblResult.delegate = self
         
+        tblResult.rowHeight = UITableViewAutomaticDimension
+        tblResult.estimatedRowHeight = 150
+        
         searchBarCtrl.delegate = self
         self.navigationItem.titleView = searchBarCtrl
         
