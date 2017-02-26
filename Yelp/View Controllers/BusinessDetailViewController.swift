@@ -40,7 +40,7 @@ class BusinessDetailViewController: UIViewController {
             
             let label = UILabel()
             label.text = Const.Tag_Symbol + cat
-            label.font = label.font.withSize(15)
+            label.font = label.font.withSize(10)
             label.textColor = UIColor.white
             label.sizeToFit()
             
@@ -48,8 +48,8 @@ class BusinessDetailViewController: UIViewController {
             view.layer.borderWidth = 1
             view.layer.borderColor = UIColor.darkGray.cgColor
             
-            view.frame.size.width = label.frame.size.width + CGFloat(Const.Standard_Spacing)
-            view.frame.size.height = CGFloat(Const.Standard_Height)
+            view.frame.size.width = label.frame.size.width + CGFloat(Const.Standard_Spacing)/2
+            view.frame.size.height = CGFloat(Const.Standard_Height) - 10
             
             label.frame.origin.x = (view.frame.size.width - label.frame.size.width)/2
             label.frame.origin.y = (view.frame.size.height - label.frame.size.height)/2
@@ -65,7 +65,7 @@ class BusinessDetailViewController: UIViewController {
             view.addSubview(label)
             self.view.addSubview(view)
             
-            tagX += view.frame.size.width + CGFloat(Const.Standard_Spacing)
+            tagX += view.frame.size.width + CGFloat(Const.Standard_Spacing)/4
         }
     }
     
