@@ -135,7 +135,7 @@
                     <navigationItem key="navigationItem" id="Xid-b2-mF3">
                         <barButtonItem key="rightBarButtonItem" title="Filter" id="2RA-Dc-ibJ">
                             <connections>
-                                <segue destination="PJi-NG-WYI" kind="show" id="Eia-d3-hfr"/>
+                                <segue destination="PJi-NG-WYI" kind="show" identifier="showFilter" id="Eia-d3-hfr"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -246,7 +246,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CE528779-F4D7-450E-963C-A20CF5F9E096" translatesAutoresizingMaskIntoConstraints="NO" id="JaW-z2-2Id">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="6BE927BF-6437-430D-837D-700DF53A6906" translatesAutoresizingMaskIntoConstraints="NO" id="JaW-z2-2Id">
                                                     <rect key="frame" x="320" y="7" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="30" id="J5J-Uc-6zq"/>
@@ -317,6 +317,25 @@
             </objects>
             <point key="canvasLocation" x="2836" y="108.39580209895054"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="Bp0-qF-q0z">
+            <objects>
+                <viewController id="std-zb-Qcw" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="hZN-CO-Uqz"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ep8-Zl-qwj"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nZO-RC-EXG">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="WF2-ux-HSH"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HzH-0a-TlZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3788" y="870.31484257871068"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="u5L-zU-ZKq">
             <objects>
@@ -355,7 +374,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="CE528779-F4D7-450E-963C-A20CF5F9E096" width="250" height="250">
+        <image name="6BE927BF-6437-430D-837D-700DF53A6906" width="250" height="250">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

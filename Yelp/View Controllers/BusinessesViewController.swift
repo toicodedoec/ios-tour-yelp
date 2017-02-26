@@ -73,11 +73,13 @@ class BusinessesViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let navVC = segue.destination as! UINavigationController
-        let filterVC = navVC.topViewController as! FilterViewController
-        
-        filterVC.criteria = prevFilter
-        filterVC.delegate = self
+        if segue.identifier == "showFilter" {
+            let navVC = segue.destination as! UINavigationController
+            let filterVC = navVC.topViewController as! FilterViewController
+            
+            filterVC.criteria = prevFilter
+            filterVC.delegate = self
+        }
     }
     
 }
@@ -91,6 +93,13 @@ extension BusinessesViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "businessCell", for: indexPath) as! BusinessViewCell
         
         cell.business = filteredBusinesses[indexPath.row]
+        
+        // update cell selection style
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor(red:0.96, green:0.97, blue:0.70, alpha:1.0)
+        backgroundView.layer.borderWidth = 1
+        backgroundView.layer.borderColor = UIColor.gray.cgColor
+        cell.selectedBackgroundView = backgroundView
         
         return cell
     }
