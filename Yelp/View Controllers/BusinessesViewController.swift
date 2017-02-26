@@ -37,6 +37,19 @@ class BusinessesViewController: UIViewController {
         loadData()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == Const.Indentifier_Segue_Filter {
+            let navVC = segue.destination as! UINavigationController
+            let filterVC = navVC.topViewController as! FilterViewController
+            
+            filterVC.criteria = prevFilter
+            filterVC.delegate = self
+        } else if segue.identifier == Const.Indentifier_Segue_Details {
+            let nextVC = segue.destination as! BusinessDetailViewController
+            nextVC.businessDetail = selectedBusiness
+        }
+    }
+    
     func loadData(){
         if isStartup {
             MBProgressHUD.showAdded(to: self.view, animated: true)
@@ -63,6 +76,10 @@ class BusinessesViewController: UIViewController {
                     self.isStartup = false;
                 }
             }
+            
+            if error != nil {
+                self.showAlert()
+            }
         }
     }
     
@@ -71,17 +88,19 @@ class BusinessesViewController: UIViewController {
         tblResult.insertSubview(refreshControl, at: 0)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showFilter" {
-            let navVC = segue.destination as! UINavigationController
-            let filterVC = navVC.topViewController as! FilterViewController
-            
-            filterVC.criteria = prevFilter
-            filterVC.delegate = self
-        } else if segue.identifier == "showDetails" {
-            let nextVC = segue.destination as! BusinessDetailViewController
-            nextVC.businessDetail = selectedBusiness
+    func showAlert() {
+        let alert = UIAlertController(title: "Opps Network error", message: "Do you want to Retry or Exit?", preferredStyle: .alert)
+        let clearAction = UIAlertAction(title: "Exit", style: .cancel) { (alert: UIAlertAction!) -> Void in
+            UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
         }
+        let cancelAction = UIAlertAction(title: "Retry", style: .default) { (alert: UIAlertAction!) -> Void in
+            self.loadData()
+        }
+        
+        alert.addAction(clearAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true, completion:nil)
     }
 }
 

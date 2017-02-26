@@ -37,4 +37,8 @@ class Const {
     static let Indentifier_Search_Cell = "searchCell"
     
     static let Empty_String = ""
+    
+    static let Indentifier_Segue_Filter = "showFilter"
+    
+    static let Indentifier_Segue_Details = "showDetails"
 }
