@@ -23,6 +23,8 @@ class BusinessesViewController: UIViewController {
     
     var prevFilter: Filter?
     
+    var selectedBusiness: Business?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -79,6 +81,9 @@ class BusinessesViewController: UIViewController {
             
             filterVC.criteria = prevFilter
             filterVC.delegate = self
+        } else if segue.identifier == "showDetails" {
+            let nextVC = segue.destination as! BusinessDetailViewController
+            nextVC.businessDetail = selectedBusiness
         }
     }
     
@@ -105,7 +110,8 @@ extension BusinessesViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        selectedBusiness = filteredBusinesses[indexPath.row]
+        performSegue(withIdentifier: "showDetails", sender: self)
     }
 }
 
