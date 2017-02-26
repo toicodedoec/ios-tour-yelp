@@ -12,10 +12,12 @@ import MBProgressHUD
 class BusinessesViewController: UIViewController {
     
     @IBOutlet weak var tblResult: UITableView!
+    @IBOutlet weak var searchBarCtrl: UISearchBar!
     
     let refreshControl = UIRefreshControl()
     
     var businesses: [Business]!
+    var filteredBusinesses: [Business]!
     
     var isStartup: Bool = true;
     
@@ -26,6 +28,9 @@ class BusinessesViewController: UIViewController {
         
         tblResult.dataSource = self
         tblResult.delegate = self
+        
+        searchBarCtrl.delegate = self
+        self.navigationItem.titleView = searchBarCtrl
         
         isStartup = true;
         
@@ -44,6 +49,14 @@ class BusinessesViewController: UIViewController {
         Business.search(with: "Thai") { (businesses: [Business]?, error: Error?) in
             if let businesses = businesses {
                 self.businesses = businesses
+                
+                let lastSearchValue = UserDefaults.loadSearchValue()
+                
+                self.filteredBusinesses = lastSearchValue.isEmpty ? self.businesses : self.businesses.filter { (item: Business) -> Bool in
+                    return (item.name?.contains(lastSearchValue))!
+                }
+                
+                self.searchBarCtrl.text = lastSearchValue
                 
                 self.tblResult.reloadData()
                 self.refreshControl.endRefreshing()
@@ -71,13 +84,13 @@ class BusinessesViewController: UIViewController {
 
 extension BusinessesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return businesses == nil ? 0 : businesses.count
+        return filteredBusinesses == nil ? 0 : filteredBusinesses.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "businessCell", for: indexPath) as! BusinessViewCell
         
-        cell.business = businesses[indexPath.row]
+        cell.business = filteredBusinesses[indexPath.row]
         
         return cell
     }
@@ -96,6 +109,14 @@ extension BusinessesViewController: FilterViewControllerDelegate {
             if let businesses = businesses {
                 self.businesses = businesses
                 
+                let lastSearchValue = UserDefaults.loadSearchValue()
+                
+                self.filteredBusinesses = lastSearchValue.isEmpty ? self.businesses : self.businesses.filter { (item: Business) -> Bool in
+                    return (item.name?.contains(lastSearchValue))!
+                }
+                
+                self.searchBarCtrl.text = lastSearchValue
+                
                 self.tblResult.reloadData()
                 self.refreshControl.endRefreshing()
                 
@@ -105,5 +126,40 @@ extension BusinessesViewController: FilterViewControllerDelegate {
         }
     }
 }
+
+extension BusinessesViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredBusinesses = searchText.isEmpty ? businesses : businesses.filter { (item: Business) -> Bool in
+            return (item.name?.contains(searchText))!
+        }
+        
+        // UserDefaults.standard.saveSearchValue(lastSearchValue: searchText)
+        
+        tblResult.reloadData()
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.searchBarCtrl.setShowsCancelButton(true, animated: true)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        view.endEditing(true)
+        searchBarCtrl.resignFirstResponder()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBarCtrl.showsCancelButton = false
+        searchBarCtrl.text = ""
+        searchBarCtrl.resignFirstResponder()
+        
+        filteredBusinesses = businesses
+        
+        // UserDefaults.standard.saveSearchValue(lastSearchValue: "")
+        
+        tblResult.reloadData()
+    }
+}
+
 
 
