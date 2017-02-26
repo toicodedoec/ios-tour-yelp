@@ -248,7 +248,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="2C5697DC-B135-4B33-BBDE-3DE0C57411B4" translatesAutoresizingMaskIntoConstraints="NO" id="JaW-z2-2Id">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="8B80B539-6A78-413B-B48B-10890D7F8D1B" translatesAutoresizingMaskIntoConstraints="NO" id="JaW-z2-2Id">
                                                     <rect key="frame" x="320" y="7" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="30" id="J5J-Uc-6zq"/>
@@ -403,7 +403,13 @@
                             <constraint firstItem="Rug-Hf-LdG" firstAttribute="top" secondItem="V1t-uV-Wl9" secondAttribute="bottom" constant="10" id="szx-8Q-rAb"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="WF2-ux-HSH"/>
+                    <navigationItem key="navigationItem" id="WF2-ux-HSH">
+                        <barButtonItem key="rightBarButtonItem" title="Show Map" id="8Nw-Tm-ni4">
+                            <connections>
+                                <segue destination="DhP-Ed-YIv" kind="show" id="q0v-GH-eHo"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="imgAvatar" destination="w3j-nZ-H38" id="Lot-dB-47l"/>
                         <outlet property="imgStar" destination="Rug-Hf-LdG" id="r1g-wh-FY8"/>
@@ -415,7 +421,39 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HzH-0a-TlZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2836" y="828"/>
+            <point key="canvasLocation" x="1897" y="869"/>
+        </scene>
+        <!--Business Map View Controller-->
+        <scene sceneID="zZg-Vi-bh6">
+            <objects>
+                <viewController id="DhP-Ed-YIv" customClass="BusinessMapViewController" customModule="Yelp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="FfU-P7-tqj"/>
+                        <viewControllerLayoutGuide type="bottom" id="tfa-Fg-gYJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="YnM-Fp-fEW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="40G-QK-6Y0">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="tfa-Fg-gYJ" firstAttribute="top" secondItem="40G-QK-6Y0" secondAttribute="bottom" id="9cf-fz-oXH"/>
+                            <constraint firstAttribute="trailing" secondItem="40G-QK-6Y0" secondAttribute="trailing" id="Ebm-fa-zHl"/>
+                            <constraint firstItem="40G-QK-6Y0" firstAttribute="leading" secondItem="YnM-Fp-fEW" secondAttribute="leading" id="dP5-yu-Gv3"/>
+                            <constraint firstItem="40G-QK-6Y0" firstAttribute="top" secondItem="FfU-P7-tqj" secondAttribute="bottom" id="qRo-Mv-MZA"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="mapView" destination="40G-QK-6Y0" id="Ik4-Kd-XlE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0mV-sz-vQS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2836" y="869"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="u5L-zU-ZKq">
@@ -455,7 +493,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="2C5697DC-B135-4B33-BBDE-3DE0C57411B4" width="250" height="250">
+        <image name="8B80B539-6A78-413B-B48B-10890D7F8D1B" width="250" height="250">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw
